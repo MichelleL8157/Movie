@@ -147,7 +147,24 @@ public class MovieCollection
       listToSort.set(possibleIndex, temp);
     }
   }
-  
+
+  private void sortResults(ArrayList<Movie> listToSort)
+  {
+    for (int j = 1; j < listToSort.size(); j++)
+    {
+      Movie temp = listToSort.get(j);
+      String tempTitle = temp.getTitle();
+
+      int possibleIndex = j;
+      while (possibleIndex > 0 && tempTitle.compareTo(listToSort.get(possibleIndex - 1).getTitle()) < 0)
+      {
+        listToSort.set(possibleIndex, listToSort.get(possibleIndex - 1));
+        possibleIndex--;
+      }
+      listToSort.set(possibleIndex, temp);
+    }
+  }
+
   private void displayMovieInfo(Movie movie)
   {
     System.out.println();
@@ -165,17 +182,17 @@ public class MovieCollection
   private void searchCast()
   {
     ArrayList<String> casts = new ArrayList<String>();
-    int nextIndex = 0;
     for (int i = 0; i != movies.size(); i++) {
       String listOfCast = movies.get(i).getCast();
       while (listOfCast.indexOf("|") != -1) {
-        String cast = listOfCast.substring(nextIndex, listOfCast.indexOf("|"));
+        String cast = listOfCast.substring(0, listOfCast.indexOf("|"));
         if (!(casts.contains(cast))) {
           casts.add(cast);
         }
-        nextIndex = listOfCast.indexOf("|") + 1;
+        listOfCast = listOfCast.substring(listOfCast.indexOf("|") + 1);
       }
     }
+
     for (int i = 0; i != casts.size(); i++) {
       String name = casts.get(i);
       int choiceNum = i + 1;
@@ -186,7 +203,6 @@ public class MovieCollection
     int choice = scanner.nextInt();
     scanner.nextLine();
     String selectedCast = casts.get(choice - 1);
-    displayMovieInfo(selectedCast);
     System.out.println("\n ** Press Enter to Return to Main Menu **");
     scanner.nextLine();
   }
